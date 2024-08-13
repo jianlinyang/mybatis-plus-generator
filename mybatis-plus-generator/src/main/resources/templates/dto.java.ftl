@@ -1,4 +1,4 @@
-package ${package.Entity};
+package ${package.DTO};
 
 <#list table.importPackages as pkg>
 import ${pkg};
@@ -30,8 +30,7 @@ import java.io.Serial;
  * @since ${date}
  */
 <#if entityLombokModel>
-@Getter
-@Setter
+@Data
     <#if chainModel>
 @Accessors(chain = true)
     </#if>

@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) {
         String userHome = System.getProperty("user.home");
-        String workdir = Paths.get(userHome, "Documents\\code\\springdemo1\\src\\main\\java").toString();
+        String workdir = Paths.get(userHome, "Documents\\code\\springdemo\\src\\main\\java").toString();
         String packageName = "com.biz";
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(GeneratorBuilder.strategyConfigBuilder()
@@ -30,10 +30,9 @@ public class Main {
         generator.global(GeneratorBuilder.globalConfigBuilder().author("yang").outputDir(workdir).build());
         generator.packageInfo(GeneratorBuilder.packageConfigBuilder()
             .parent(packageName)
-//            .enableResource()
+            .enableResource()
             .xml("mapper")
             .build());
-
-        generator.execute(new FreemarkerTemplateEngine());
+        generator.execute(new FreemarkerTemplateEngine(), false);
     }
 }

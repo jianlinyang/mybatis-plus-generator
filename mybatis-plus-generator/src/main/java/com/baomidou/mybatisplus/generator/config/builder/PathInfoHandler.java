@@ -101,7 +101,13 @@ class PathInfoHandler {
     }
 
     private void putPathInfo(OutputFile outputFile, String module) {
-        pathInfo.putIfAbsent(outputFile, joinPath(outputDir, packageConfig.getPackageInfo(module)));
+        if (ConstVal.XML.equals(module) && packageConfig.isEnableResource()) {
+            File file = new File(outputDir);
+            String parent = file.getParent();
+            pathInfo.putIfAbsent(outputFile, joinPath(parent, joinPath("resources", packageConfig.getXml())));
+        } else {
+            pathInfo.putIfAbsent(outputFile, joinPath(outputDir, packageConfig.getPackageInfo(module)));
+        }
     }
 
     /**

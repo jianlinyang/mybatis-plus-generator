@@ -62,8 +62,8 @@ public class AutoGenerator {
      * 模板 相关配置
      * @deprecated 3.5.6 {@link #strategy}
      */
-    @Deprecated
-    private TemplateConfig template;
+//    @Deprecated
+//    private TemplateConfig template;
     /**
      * 全局 相关配置
      */
@@ -130,7 +130,7 @@ public class AutoGenerator {
      */
     @Deprecated
     public AutoGenerator template(@NotNull TemplateConfig templateConfig) {
-        this.template = templateConfig;
+//        this.template = templateConfig;
         return this;
     }
 
@@ -171,10 +171,20 @@ public class AutoGenerator {
      * @param templateEngine 模板引擎
      */
     public void execute(AbstractTemplateEngine templateEngine) {
+        this.execute(templateEngine, true);
+    }
+
+    /**
+     * 生成代码
+     *
+     * @param templateEngine 模板引擎
+     * @param needOpen       是否打开输出目录
+     */
+    public void execute(AbstractTemplateEngine templateEngine, boolean needOpen) {
         logger.debug("==========================准备生成文件...==========================");
         // 初始化配置
         if (null == config) {
-            config = new ConfigBuilder(packageInfo, dataSource, strategy, template, globalConfig, injection);
+            config = new ConfigBuilder(packageInfo, dataSource, strategy, globalConfig, injection);
         }
         if (null == templateEngine) {
             // 为了兼容之前逻辑，采用 Velocity 引擎 【 默认 】
@@ -182,7 +192,11 @@ public class AutoGenerator {
         }
         templateEngine.setConfigBuilder(config);
         // 模板引擎初始化执行文件输出
-        templateEngine.init(config).batchOutput().open();
+        if (needOpen) {
+            templateEngine.init(config).batchOutput().open();
+        } else {
+            templateEngine.init(config).batchOutput();
+        }
         logger.debug("==========================文件生成完成！！！==========================");
     }
 

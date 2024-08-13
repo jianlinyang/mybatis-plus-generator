@@ -27,9 +27,11 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.fill.Column;
 import com.baomidou.mybatisplus.generator.fill.Property;
 import com.baomidou.mybatisplus.generator.jdbc.DatabaseMetaDataWrapper;
+import lombok.Getter;
 import org.apache.ibatis.type.JdbcType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -104,6 +106,13 @@ public class TableField {
      * 自定义查询字段列表
      */
     private Map<String, Object> customMap;
+    /**
+     * crud DTO字段信息
+     */
+    @Getter
+    private final HashSet<String> crudDTOProperties = new HashSet<>();
+
+    private static final String CRUD_PATTERN = "[curd]+$";
 
     /**
      * 字段元数据信息

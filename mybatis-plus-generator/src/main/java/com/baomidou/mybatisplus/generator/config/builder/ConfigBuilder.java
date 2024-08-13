@@ -38,8 +38,8 @@ public class ConfigBuilder {
      *
      * @deprecated 3.5.6
      */
-    @Deprecated
-    private final TemplateConfig templateConfig;
+//    @Deprecated
+//    private final TemplateConfig templateConfig;
 
     /**
      * 数据库表信息
@@ -93,16 +93,15 @@ public class ConfigBuilder {
      * @param packageConfig    包配置
      * @param dataSourceConfig 数据源配置
      * @param strategyConfig   表配置
-     * @param templateConfig   模板配置
      * @param globalConfig     全局配置
      */
     public ConfigBuilder(@Nullable PackageConfig packageConfig, @NotNull DataSourceConfig dataSourceConfig,
-                         @Nullable StrategyConfig strategyConfig, @Nullable TemplateConfig templateConfig,
+                         @Nullable StrategyConfig strategyConfig,
                          @Nullable GlobalConfig globalConfig, @Nullable InjectionConfig injectionConfig) {
         this.dataSourceConfig = dataSourceConfig;
         this.strategyConfig = Optional.ofNullable(strategyConfig).orElseGet(GeneratorBuilder::strategyConfig);
         this.globalConfig = Optional.ofNullable(globalConfig).orElseGet(GeneratorBuilder::globalConfig);
-        this.templateConfig = Optional.ofNullable(templateConfig).orElseGet(GeneratorBuilder::templateConfig);
+//        this.templateConfig = Optional.ofNullable(templateConfig).orElseGet(GeneratorBuilder::templateConfig);
         this.packageConfig = Optional.ofNullable(packageConfig).orElseGet(GeneratorBuilder::packageConfig);
         this.injectionConfig = Optional.ofNullable(injectionConfig).orElseGet(GeneratorBuilder::injectionConfig);
         this.pathInfo.putAll(new PathInfoHandler(this.globalConfig, this.strategyConfig, this.packageConfig).getPathInfo());
@@ -142,18 +141,6 @@ public class ConfigBuilder {
     public ConfigBuilder setInjectionConfig(@NotNull InjectionConfig injectionConfig) {
         this.injectionConfig = injectionConfig;
         return this;
-    }
-
-    /**
-     * 获取模板配置
-     *
-     * @return 模板配置
-     * @deprecated 3.5.6 {@link #strategyConfig}
-     */
-    @NotNull
-    @Deprecated
-    public TemplateConfig getTemplateConfig() {
-        return templateConfig;
     }
 
     @NotNull

@@ -62,8 +62,8 @@ public final class FastAutoGenerator {
      * 模板配置 Builder
      * @deprecated 3.5.6 {@link #strategyConfigBuilder}
      */
-    @Deprecated
-    private final TemplateConfig.Builder templateConfigBuilder;
+//    @Deprecated
+//    private final TemplateConfig.Builder templateConfigBuilder;
 
     /**
      * 模板引擎
@@ -76,7 +76,7 @@ public final class FastAutoGenerator {
         this.packageConfigBuilder = new PackageConfig.Builder();
         this.strategyConfigBuilder = new StrategyConfig.Builder();
         this.injectionConfigBuilder = new InjectionConfig.Builder();
-        this.templateConfigBuilder = new TemplateConfig.Builder();
+//        this.templateConfigBuilder = new TemplateConfig.Builder();
     }
 
     public static FastAutoGenerator create(@NotNull String url, String username, String password) {
@@ -197,7 +197,7 @@ public final class FastAutoGenerator {
      */
     @Deprecated
     public FastAutoGenerator templateConfig(Consumer<TemplateConfig.Builder> consumer) {
-        consumer.accept(this.templateConfigBuilder);
+//        consumer.accept(this.templateConfigBuilder);
         return this;
     }
 
@@ -208,7 +208,7 @@ public final class FastAutoGenerator {
      */
     @Deprecated
     public FastAutoGenerator templateConfig(BiConsumer<Function<String, String>, TemplateConfig.Builder> biConsumer) {
-        biConsumer.accept(this::scannerNext, this.templateConfigBuilder);
+//        biConsumer.accept(this::scannerNext, this.templateConfigBuilder);
         return this;
     }
 
@@ -234,7 +234,7 @@ public final class FastAutoGenerator {
             // 注入配置
             .injection(this.injectionConfigBuilder.build())
             // 模板配置
-            .template(this.templateConfigBuilder.build())
+//            .template(this.templateConfigBuilder.build())
             // 执行
             .execute(this.templateEngine);
     }

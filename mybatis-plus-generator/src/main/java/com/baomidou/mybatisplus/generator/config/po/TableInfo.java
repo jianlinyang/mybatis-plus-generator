@@ -15,9 +15,11 @@
  */
 package com.baomidou.mybatisplus.generator.config.po;
 
+import cn.hutool.core.map.MapBuilder;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
@@ -134,6 +136,16 @@ public class TableInfo {
      * 实体
      */
     private final Entity entity;
+    /**
+     * crud DTO字段信息
+     */
+    @Getter
+    private final Map<String, List<TableField>> crudFieldMap = MapBuilder.<String, List<TableField>>create()
+        .put(ConstVal.C, new ArrayList<>())
+        .put(ConstVal.R, new ArrayList<>())
+        .put(ConstVal.U, new ArrayList<>())
+        .put(ConstVal.D, new ArrayList<>())
+        .build();
 
     /**
      * 构造方法

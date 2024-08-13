@@ -88,6 +88,17 @@ public class PackageConfig {
     @Getter
     private Map<OutputFile, String> pathInfo;
 
+
+    /**
+     * 是否将mapper放入resource目录
+     */
+    @Getter
+    private boolean enableResource = false;
+    /**
+     * dto包名
+     */
+    @Getter
+    private String dto = "dto";
     /**
      * 包配置信息
      *
@@ -132,6 +143,7 @@ public class PackageConfig {
             packageInfo.put(ConstVal.MAPPER, this.joinPackage(this.getMapper()));
             packageInfo.put(ConstVal.XML, this.joinPackage(this.getXml()));
             packageInfo.put(ConstVal.SERVICE, this.joinPackage(this.getService()));
+            packageInfo.put(ConstVal.DTO, this.joinPackage(this.getDto()));
             packageInfo.put(ConstVal.SERVICE_IMPL, this.joinPackage(this.getServiceImpl()));
             packageInfo.put(ConstVal.CONTROLLER, this.joinPackage(this.getController()));
             packageInfo.put(ConstVal.PARENT, this.getParent());
@@ -214,6 +226,21 @@ public class PackageConfig {
             return this;
         }
 
+        /**
+         * 是否将mapper放入resource目录
+         */
+        public Builder enableResource() {
+            this.packageConfig.enableResource = true;
+            return this;
+        }
+
+        /**
+         * dto 包名
+         */
+        public Builder dto(String dto) {
+            this.packageConfig.dto = dto;
+            return this;
+        }
         /**
          * service实现类包名
          *

@@ -131,8 +131,18 @@ public class DefaultQuery extends AbstractDatabaseQuery {
             field.setPropertyName(propertyName, columnType);
             field.setMetaInfo(metaInfo);
             tableInfo.addField(field);
+            processCrudField(tableInfo, field);
         });
         tableInfo.processTable();
+    }
+
+    private static void processCrudField(@NotNull TableInfo tableInfo, TableField field) {
+        for (String crudDTOProperty : field.getCrudDTOProperties()) {
+            Map<String, List<TableField>> crudFieldMap = tableInfo.getCrudFieldMap();
+            if (crudFieldMap.containsKey(crudDTOProperty)) {
+                crudFieldMap.get(crudDTOProperty).add(field);
+            }
+        }
     }
 
     protected Map<String, DatabaseMetaDataWrapper.Column> getColumnsInfo(String tableName) {

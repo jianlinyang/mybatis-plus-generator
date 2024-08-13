@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static cn.hutool.core.util.ClassUtil.getClassLoader;
+
 
 /**
  * 模板引擎抽象类
@@ -209,11 +211,11 @@ public abstract class AbstractTemplateEngine {
     @NotNull
     @Deprecated
     protected Optional<String> getTemplateFilePath(@NotNull Function<TemplateConfig, String> function) {
-        TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
-        String filePath = function.apply(templateConfig);
-        if (StringUtils.isNotBlank(filePath)) {
-            return Optional.of(templateFilePath(filePath));
-        }
+//        TemplateConfig templateConfig = getConfigBuilder().getTemplateConfig();
+//        String filePath = function.apply(templateConfig);
+//        if (StringUtils.isNotBlank(filePath)) {
+//            return Optional.of(templateFilePath(filePath));
+//        }
         return Optional.empty();
     }
 
@@ -312,6 +314,7 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("swagger", globalConfig.isSwagger());
         objectMap.put("springdoc", globalConfig.isSpringdoc());
         objectMap.put("date", globalConfig.getCommentDate());
+        objectMap.put("enableSerialAnnotate", detectEnableSerialAnnotate());
         // 启用 schema 处理逻辑
         String schemaName = "";
         if (strategyConfig.isEnableSchema()) {
@@ -326,6 +329,20 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("table", tableInfo);
         objectMap.put("entity", tableInfo.getEntityName());
         return objectMap;
+    }
+
+    /**
+     * 判断是否加 @Serial 注解
+     *
+     * @return boolean
+     */
+    private boolean detectEnableSerialAnnotate() {
+        try {
+            Class.forName("java.io.Serial", false, getClassLoader());
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -33,6 +33,7 @@ public interface ConstVal {
     String SERVICE = "Service";
     String SERVICE_IMPL = "ServiceImpl";
     String MAPPER = "Mapper";
+    String DTO = "DTO";
     String XML = "Xml";
     String CONTROLLER = "Controller";
     String PARENT = "Parent";
@@ -49,6 +50,10 @@ public interface ConstVal {
      * 实体模板路径
      */
     String TEMPLATE_ENTITY_JAVA = "/templates/entity.java";
+    /**
+     * dto模板路径
+     */
+    String TEMPLATE_DTO_JAVA = "/templates/dto.java";
 
     /**
      * 实体模板路径(kotlin模板)
@@ -91,4 +96,10 @@ public interface ConstVal {
      * @see com.baomidou.mybatisplus.core.metadata.TableInfoHelper.DEFAULT_ID_NAME
      */
     String DEFAULT_ID_NAME = "id";
+
+    String C = "c";
+    String R = "r";
+    String U = "u";
+    String D = "d";
+
 }
