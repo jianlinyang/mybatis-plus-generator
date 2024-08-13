@@ -80,7 +80,7 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'signing'
     apply plugin: 'maven-publish'
-    apply plugin: 'tech.yanand.maven-central-publish'
+//    apply plugin: 'tech.yanand.maven-central-publish'
     apply plugin: "io.freefair.lombok"
 
     sourceCompatibility = "${javaVersion}"
@@ -185,76 +185,76 @@ subprojects {
         }
     }
 
-    publishing {
-        repositories {
-            maven {
-                name = "Local"
-                url = layout.buildDirectory.dir('repos/bundles')
-            }
-        }
-
-        // use example : ./gradlew clean build publish publishToMavenCentralPortal -DauthToken='xxxxxx' -x test
-        mavenCentral {
-            repoDir = layout.buildDirectory.dir('repos/bundles')
-            // Base64 encoded of "username:password"
-            authToken = System.getProperty("authToken")
-            // 默认自动发布 AUTOMATIC
-            publishingType = 'USER_MANAGED'
-        }
-
-        publications {
-
-            mavenJava(MavenPublication) {
-                from components.java
-
-                artifact sourcesJar
-                artifact javadocJar
-
-                pom {
-                    name = 'mybatis-plus'
-                    packaging 'jar'
-                    description = 'An enhanced toolkit of Mybatis to simplify development.'
-                    url = 'https://github.com/baomidou/mybatis-plus'
-
-                    scm {
-                        connection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
-                        developerConnection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
-                        url = 'https://github.com/baomidou/mybatis-plus'
-                    }
-
-                    licenses {
-                        license {
-                            name = 'The Apache License, Version 2.0'
-                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id = 'baomidou'
-                            name = 'hubin'
-                            email = 'jobob@qq.com'
-                        }
-                    }
-
-                    withXml {
-                        def root = asNode()
-                        root.dependencies.'*'.findAll {
-                            def d = it
-                            d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
-                                dep.name == it.artifactId.text()
-                            }.each() {
-                                d.scope*.value = 'compile'
-                                d.appendNode('optional', true)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        signing {
-            sign publishing.publications.mavenJava
-        }
-    }
+//    publishing {
+//        repositories {
+//            maven {
+//                name = "Local"
+//                url = layout.buildDirectory.dir('repos/bundles')
+//            }
+//        }
+//
+//        // use example : ./gradlew clean build publish publishToMavenCentralPortal -DauthToken='xxxxxx' -x test
+//        mavenCentral {
+//            repoDir = layout.buildDirectory.dir('repos/bundles')
+//            // Base64 encoded of "username:password"
+//            authToken = System.getProperty("authToken")
+//            // 默认自动发布 AUTOMATIC
+//            publishingType = 'USER_MANAGED'
+//        }
+//
+//        publications {
+//
+//            mavenJava(MavenPublication) {
+//                from components.java
+//
+//                artifact sourcesJar
+//                artifact javadocJar
+//
+//                pom {
+//                    name = 'mybatis-plus'
+//                    packaging 'jar'
+//                    description = 'An enhanced toolkit of Mybatis to simplify development.'
+//                    url = 'https://github.com/baomidou/mybatis-plus'
+//
+//                    scm {
+//                        connection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
+//                        developerConnection = 'scm:git@github.com:Codearte/gradle-nexus-staging-plugin.git'
+//                        url = 'https://github.com/baomidou/mybatis-plus'
+//                    }
+//
+//                    licenses {
+//                        license {
+//                            name = 'The Apache License, Version 2.0'
+//                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                        }
+//                    }
+//
+//                    developers {
+//                        developer {
+//                            id = 'baomidou'
+//                            name = 'hubin'
+//                            email = 'jobob@qq.com'
+//                        }
+//                    }
+//
+//                    withXml {
+//                        def root = asNode()
+//                        root.dependencies.'*'.findAll {
+//                            def d = it
+//                            d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
+//                                dep.name == it.artifactId.text()
+//                            }.each() {
+//                                d.scope*.value = 'compile'
+//                                d.appendNode('optional', true)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        signing {
+//            sign publishing.publications.mavenJava
+//        }
+//    }
 }

@@ -10,22 +10,22 @@ buildscript {
         //noinspection DifferentKotlinGradleVersion
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.10"
         classpath "io.freefair.gradle:lombok-plugin:8.7.1"
-        classpath "tech.yanand.maven-central-publish:tech.yanand.maven-central-publish.gradle.plugin:1.1.1"
+//        classpath "tech.yanand.maven-central-publish:tech.yanand.maven-central-publish.gradle.plugin:1.1.1"
     }
 }
 
 rootProject.name = 'mybatis-plus-root'
-include 'mybatis-plus'
-include 'mybatis-plus-core'
-include 'mybatis-plus-annotation'
-include 'mybatis-plus-extension'
+//include 'mybatis-plus'
+//include 'mybatis-plus-core'
+//include 'mybatis-plus-annotation'
+//include 'mybatis-plus-extension'
 include 'mybatis-plus-generator'
-include 'mybatis-plus-bom'
-include 'spring-boot-starter'
-include ':spring-boot-starter:mybatis-plus-boot-starter'
-include ':spring-boot-starter:mybatis-plus-boot-starter-test'
-include ':spring-boot-starter:mybatis-plus-spring-boot-autoconfigure'
-include ':spring-boot-starter:mybatis-plus-spring-boot-test-autoconfigure'
-include ':spring-boot-starter:mybatis-plus-spring-boot3-starter'
-include ':spring-boot-starter:mybatis-plus-spring-boot3-starter-test'
+//include 'mybatis-plus-bom'
+//include 'spring-boot-starter'
+//include ':spring-boot-starter:mybatis-plus-boot-starter'
+//include ':spring-boot-starter:mybatis-plus-boot-starter-test'
+//include ':spring-boot-starter:mybatis-plus-spring-boot-autoconfigure'
+//include ':spring-boot-starter:mybatis-plus-spring-boot-test-autoconfigure'
+//include ':spring-boot-starter:mybatis-plus-spring-boot3-starter'
+//include ':spring-boot-starter:mybatis-plus-spring-boot3-starter-test'
 

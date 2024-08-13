@@ -1,9 +1,12 @@
 dependencies {
-    implementation project(":mybatis-plus-extension")
     implementation "${lib.velocity}"
     implementation "${lib.freemarker}"
     implementation "${lib.beetl}"
     implementation "${lib.enjoy}"
+    implementation "${lib.mysql}"
+    implementation 'com.baomidou:mybatis-plus-extension:3.5.7'
+    implementation 'cn.hutool:hutool-all:5.8.26'
+    implementation "ch.qos.logback:logback-classic:1.2.13"
 
     compileOnly "org.jetbrains:annotations:24.1.0"
     testImplementation "${lib.sqlserver}"
@@ -11,7 +14,7 @@ dependencies {
     testImplementation lib.oracle as ConfigurableFileTree
     testImplementation lib.dm as ConfigurableFileTree
     testImplementation "${lib.h2}"
-    testImplementation "${lib.mysql}"
+//    testImplementation "${lib.mysql}"
     testImplementation "${lib.sqlite}"
     testImplementation "${lib.firebird}"
     testImplementation "${lib.'swagger-annotations'}"
