@@ -122,6 +122,7 @@ public class StrategyConfig {
     private LikeTable notLikeTable;
 
     private final Entity.Builder entityBuilder = new Entity.Builder(this);
+    private final DTO.Builder dtoBuilder = new DTO.Builder(this);
 
     private final Controller.Builder controllerBuilder = new Controller.Builder(this);
 
@@ -130,6 +131,7 @@ public class StrategyConfig {
     private final Service.Builder serviceBuilder = new Service.Builder(this);
 
     private Entity entity;
+    private DTO dto;
 
     private Controller controller;
 
@@ -164,6 +166,20 @@ public class StrategyConfig {
         return entity;
     }
 
+
+    /**
+     * dto配置
+     *
+     * @return 实体配置
+     * @since 3.5.0
+     */
+    @NotNull
+    public DTO dto() {
+        if (dto == null) {
+            this.dto = dtoBuilder.get();
+        }
+        return dto;
+    }
     /**
      * 控制器配置构建者
      *

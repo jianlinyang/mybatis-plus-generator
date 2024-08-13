@@ -82,6 +82,11 @@ public class TableInfo {
     private String entityName;
 
     /**
+     * dto名称
+     */
+    @Getter
+    private String dtoName;
+    /**
      * mapper名称
      */
     @Getter
@@ -183,6 +188,12 @@ public class TableInfo {
      */
     public TableInfo setEntityName(@NotNull String entityName) {
         this.entityName = entityName;
+        setConvert();
+        return this;
+    }
+
+    public TableInfo setDtoName(@NotNull String dtoName) {
+        this.dtoName = dtoName;
         setConvert();
         return this;
     }
@@ -339,6 +350,7 @@ public class TableInfo {
 
     /**
      * 获取是否生成service接口
+     *
      * @deprecated {@link Service.Builder#disableService()}
      */
     @Deprecated

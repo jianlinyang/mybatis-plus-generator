@@ -104,6 +104,23 @@ public abstract class AbstractTemplateEngine {
         }
     }
 
+    /**
+     * 输出dto文件
+     *
+     * @param tableInfo 表信息
+     * @param objectMap 渲染数据
+     */
+    protected void outputDTO(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
+        String entityName = tableInfo.getEntityName();
+        String entityPath = getPathInfo(OutputFile.dto);
+        Entity entity = this.getConfigBuilder().getStrategyConfig().entity();
+        GlobalConfig globalConfig = configBuilder.getGlobalConfig();
+        if (entity.isGenerate()) {
+            String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
+            outputFile(getOutputFile(entityFile, OutputFile.entity), objectMap, templateFilePath(globalConfig.isKotlin() ? entity.getKotlinTemplate() : entity.getJavaTemplate()), getConfigBuilder().getStrategyConfig().entity().isFileOverride());
+        }
+    }
+
     protected File getOutputFile(String filePath, OutputFile outputFile) {
         return getConfigBuilder().getStrategyConfig().getOutputFile().createFile(filePath, outputFile);
     }

@@ -91,6 +91,10 @@ class PathInfoHandler {
         if (controller.isGenerate()) {
             putPathInfo(controller.getTemplatePath(), OutputFile.controller, ConstVal.CONTROLLER);
         }
+        DTO dto = strategyConfig.dto();
+        if (dto.isGenerate()) {
+            putPathInfo(dto.getJavaTemplate(), OutputFile.dto, ConstVal.DTO);
+        }
         putPathInfo(OutputFile.parent, ConstVal.PARENT);
     }
 

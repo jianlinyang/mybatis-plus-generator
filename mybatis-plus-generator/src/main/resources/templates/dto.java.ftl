@@ -76,14 +76,6 @@ public class ${entity} {
         </#if>
     </#if>
     <#if field.keyFlag>
-        <#-- 主键 -->
-        <#if field.keyIdentityFlag>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
-        <#elseif idType??>
-    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
-        <#elseif field.convert>
-    @TableId("${field.annotationColumnName}")
-        </#if>
         <#-- 普通字段 -->
     <#elseif field.fill??>
     <#-- -----   存在字段填充设置   ----->
@@ -135,17 +127,6 @@ public class ${entity} {
 
     public static final String ${field.name?upper_case} = "${field.name}";
     </#list>
-</#if>
-<#if activeRecord>
-
-    @Override
-    public Serializable pkVal() {
-    <#if keyPropertyName??>
-        return this.${keyPropertyName};
-    <#else>
-        return null;
-    </#if>
-    }
 </#if>
 <#if !entityLombokModel>
 

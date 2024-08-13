@@ -23,6 +23,7 @@ package com.baomidou.mybatisplus.generator.config;
  */
 public enum OutputFile {
     entity,
+    dto,
     service,
     serviceImpl,
     mapper,
