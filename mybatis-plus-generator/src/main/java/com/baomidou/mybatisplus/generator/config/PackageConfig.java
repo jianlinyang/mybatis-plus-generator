@@ -88,12 +88,6 @@ public class PackageConfig {
     @Getter
     private Map<OutputFile, String> pathInfo;
 
-
-    /**
-     * 是否将mapper放入resource目录
-     */
-    @Getter
-    private boolean enableResource = false;
     /**
      * dto包名
      */
@@ -225,15 +219,6 @@ public class PackageConfig {
             this.packageConfig.service = service;
             return this;
         }
-
-        /**
-         * 是否将mapper放入resource目录
-         */
-        public Builder enableResource() {
-            this.packageConfig.enableResource = true;
-            return this;
-        }
-
         /**
          * dto 包名
          */

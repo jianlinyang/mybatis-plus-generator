@@ -151,7 +151,10 @@ public class StrategyConfig {
     public Entity.Builder entityBuilder() {
         return entityBuilder;
     }
-
+    @NotNull
+    public DTO.Builder dtoBuilder() {
+        return dtoBuilder;
+    }
     /**
      * 实体配置
      *

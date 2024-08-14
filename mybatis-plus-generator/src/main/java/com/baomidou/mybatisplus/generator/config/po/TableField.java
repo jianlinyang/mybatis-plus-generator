@@ -15,6 +15,9 @@
  */
 package com.baomidou.mybatisplus.generator.config.po;
 
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -31,8 +34,11 @@ import lombok.Getter;
 import org.apache.ibatis.type.JdbcType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 表字段信息
@@ -278,7 +284,37 @@ public class TableField {
     public TableField setComment(String comment) {
         this.comment = this.globalConfig.isSwagger()
             && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
+        processComment();
         return this;
+    }
+
+    private void processComment() {
+        if (StringUtils.isNotBlank(this.comment)) {
+            String strip = StrUtil.strip(this.comment, " ");
+            if ("id".equals(strip)) {
+                return;
+            }
+            String s = ReUtil.get(CRUD_PATTERN, strip, 0);
+            this.comment = this.comment.replaceAll(CRUD_PATTERN, "");
+            if (StringUtils.isNotBlank(s)) {
+                this.crudDTOProperties.addAll(Arrays.stream(s.split("")).map(
+                    x -> {
+                        switch (x) {
+                            case "c":
+                                return ConstVal.C;
+                            case "u":
+                                return ConstVal.U;
+                            case "r":
+                                return ConstVal.R;
+                            case "d":
+                                return ConstVal.D;
+                            default:
+                                return null;
+                        }
+                    }
+                ).filter(StrUtil::isNotBlank).collect(Collectors.toList()));
+            }
+        }
     }
 
     public TableField setColumnName(String columnName) {

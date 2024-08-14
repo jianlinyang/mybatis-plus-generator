@@ -39,6 +39,11 @@ public class BaseBuilder implements IConfigBuilder<StrategyConfig> {
     }
 
     @NotNull
+    public DTO.Builder dtoBuilder() {
+        return strategyConfig.dtoBuilder();
+    }
+
+    @NotNull
     public Controller.Builder controllerBuilder() {
         return strategyConfig.controllerBuilder();
     }

@@ -1,10 +1,14 @@
 package com.baomidou.mybatisplus.generator;
 
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.builder.GeneratorBuilder;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
+import java.io.File;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 public class Main {
     /**
@@ -21,16 +25,27 @@ public class Main {
         String packageName = "com.biz";
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(GeneratorBuilder.strategyConfigBuilder()
+            .outputFile(
+                (path, type) -> {
+                    if (Objects.requireNonNull(type) == OutputFile.xml) {
+                        String needReplace = "java" + File.separator + packageName.replaceAll("\\.", StringPool.BACK_SLASH + File.separator);
+                        return new File(path.replace(needReplace, "resources"));
+                    }
+                    return new File(path);
+                }
+            )
             .entityBuilder()
             .enableLombok()
             .superClass("com.biz.entity.BaseEntity")
             .addSuperEntityColumns("create_time", "update_time")
             .enableFileOverride()
+            .dtoBuilder()
+            .enableLombok()
+            .enableFileOverride()
             .build());
         generator.global(GeneratorBuilder.globalConfigBuilder().author("yang").outputDir(workdir).build());
         generator.packageInfo(GeneratorBuilder.packageConfigBuilder()
             .parent(packageName)
-            .enableResource()
             .xml("mapper")
             .build());
         generator.execute(new FreemarkerTemplateEngine(), false);

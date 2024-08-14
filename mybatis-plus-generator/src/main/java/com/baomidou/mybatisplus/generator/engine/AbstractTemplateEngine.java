@@ -21,6 +21,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.builder.Controller;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
+import com.baomidou.mybatisplus.generator.config.builder.DTO;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.builder.Service;
@@ -111,13 +112,21 @@ public abstract class AbstractTemplateEngine {
      * @param objectMap 渲染数据
      */
     protected void outputDTO(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
-        String entityName = tableInfo.getEntityName();
-        String entityPath = getPathInfo(OutputFile.dto);
-        Entity entity = this.getConfigBuilder().getStrategyConfig().entity();
-        GlobalConfig globalConfig = configBuilder.getGlobalConfig();
-        if (entity.isGenerate()) {
-            String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
-            outputFile(getOutputFile(entityFile, OutputFile.entity), objectMap, templateFilePath(globalConfig.isKotlin() ? entity.getKotlinTemplate() : entity.getJavaTemplate()), getConfigBuilder().getStrategyConfig().entity().isFileOverride());
+        String dtoName = tableInfo.getDtoName();
+        String dtoPath = getPathInfo(OutputFile.dto);
+        DTO dto = this.getConfigBuilder().getStrategyConfig().dto();
+        if (dto.isGenerate()) {
+            tableInfo.getCrudFieldMap().forEach(
+                (key, value) -> {
+                    if (!value.isEmpty()) {
+                        String name = dtoName + key;
+                        String dtoFile = String.format((dtoPath + File.separator + "%s" + suffixJavaOrKt()), name);
+                        objectMap.put("dto", name);
+                        objectMap.put("dtoFields", value);
+                        outputFile(getOutputFile(dtoFile, OutputFile.dto), objectMap, templateFilePath(dto.getJavaTemplate()), getConfigBuilder().getStrategyConfig().entity().isFileOverride());
+                    }
+                }
+            );
         }
     }
 
@@ -265,6 +274,8 @@ public abstract class AbstractTemplateEngine {
                 });
                 // entity
                 outputEntity(tableInfo, objectMap);
+                // dto
+                outputDTO(tableInfo, objectMap);
                 // mapper and xml
                 outputMapper(tableInfo, objectMap);
                 // service
@@ -317,6 +328,8 @@ public abstract class AbstractTemplateEngine {
         StrategyConfig strategyConfig = config.getStrategyConfig();
         Map<String, Object> controllerData = strategyConfig.controller().renderData(tableInfo);
         Map<String, Object> objectMap = new HashMap<>(controllerData);
+        Map<String, Object> dtoData = strategyConfig.dto().renderData(tableInfo);
+        objectMap.putAll(dtoData);
         Map<String, Object> mapperData = strategyConfig.mapper().renderData(tableInfo);
         objectMap.putAll(mapperData);
         Map<String, Object> serviceData = strategyConfig.service().renderData(tableInfo);

@@ -59,12 +59,6 @@ public class AutoGenerator {
      */
     private PackageConfig packageInfo;
     /**
-     * 模板 相关配置
-     * @deprecated 3.5.6 {@link #strategy}
-     */
-//    @Deprecated
-//    private TemplateConfig template;
-    /**
      * 全局 相关配置
      */
     private GlobalConfig globalConfig;
@@ -117,20 +111,6 @@ public class AutoGenerator {
      */
     public AutoGenerator packageInfo(@NotNull PackageConfig packageConfig) {
         this.packageInfo = packageConfig;
-        return this;
-    }
-
-    /**
-     * 指定模板配置
-     *
-     * @param templateConfig 模板配置
-     * @return this
-     * @deprecated 3.5.6 {@link #strategy(StrategyConfig)}
-     * @since 3.5.0
-     */
-    @Deprecated
-    public AutoGenerator template(@NotNull TemplateConfig templateConfig) {
-//        this.template = templateConfig;
         return this;
     }
 

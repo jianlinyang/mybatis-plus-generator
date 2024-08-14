@@ -15,12 +15,11 @@ import lombok.Setter;
     <#if chainModel>
 import lombok.experimental.Accessors;
     </#if>
-    <#if enableSerialAnnotate>
+</#if>
+<#if enableSerialAnnotate>
 
 import java.io.Serial;
-    </#if>
 </#if>
-
 /**
  * <p>
  * ${table.comment!}

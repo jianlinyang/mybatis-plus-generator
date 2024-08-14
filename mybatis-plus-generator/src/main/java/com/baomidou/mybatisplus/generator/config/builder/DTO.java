@@ -208,13 +208,13 @@ public class DTO implements ITemplate {
     @NotNull
     public Map<String, Object> renderData(@NotNull TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
-        data.put("entitySerialVersionUID", this.serialVersionUID);
-        data.put("entityColumnConstant", this.columnConstant);
-        data.put("entityBuilderModel", this.chain);
-        data.put("chainModel", this.chain);
-        data.put("entityLombokModel", this.lombok);
-        data.put("entityBooleanColumnRemoveIsPrefix", this.booleanColumnRemoveIsPrefix);
-        data.put("superEntityClass", ClassUtils.getSimpleName(this.superClass));
+        data.put("dtoSerialVersionUID", this.serialVersionUID);
+        data.put("dtoColumnConstant", this.columnConstant);
+        data.put("dtoBuilderModel", this.chain);
+        data.put("dtoChainModel", this.chain);
+        data.put("dtoLombokModel", this.lombok);
+        data.put("dtoBooleanColumnRemoveIsPrefix", this.booleanColumnRemoveIsPrefix);
+        data.put("superDTOClass", ClassUtils.getSimpleName(this.superClass));
         return data;
     }
 

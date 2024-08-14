@@ -18,7 +18,11 @@ package com.baomidou.mybatisplus.generator.config.builder;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.ConstVal;
+import com.baomidou.mybatisplus.generator.config.GlobalConfig;
+import com.baomidou.mybatisplus.generator.config.OutputFile;
+import com.baomidou.mybatisplus.generator.config.PackageConfig;
+import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import lombok.Getter;
 
 import java.io.File;
@@ -105,13 +109,7 @@ class PathInfoHandler {
     }
 
     private void putPathInfo(OutputFile outputFile, String module) {
-        if (ConstVal.XML.equals(module) && packageConfig.isEnableResource()) {
-            File file = new File(outputDir);
-            String parent = file.getParent();
-            pathInfo.putIfAbsent(outputFile, joinPath(parent, joinPath("resources", packageConfig.getXml())));
-        } else {
-            pathInfo.putIfAbsent(outputFile, joinPath(outputDir, packageConfig.getPackageInfo(module)));
-        }
+        pathInfo.putIfAbsent(outputFile, joinPath(outputDir, packageConfig.getPackageInfo(module)));
     }
 
     /**

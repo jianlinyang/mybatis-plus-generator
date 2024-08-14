@@ -192,12 +192,6 @@ public class TableInfo {
         return this;
     }
 
-    public TableInfo setDtoName(@NotNull String dtoName) {
-        this.dtoName = dtoName;
-        setConvert();
-        return this;
-    }
-
     /**
      * 添加字段
      *
@@ -308,6 +302,7 @@ public class TableInfo {
     public void processTable() {
         String entityName = entity.getNameConvert().entityNameConvert(this);
         this.setEntityName(entity.getConverterFileName().convert(entityName));
+        this.dtoName = strategyConfig.dto().getConverterFileName().convert(entityName);
         this.mapperName = strategyConfig.mapper().getConverterMapperFileName().convert(entityName);
         this.xmlName = strategyConfig.mapper().getConverterXmlFileName().convert(entityName);
         this.serviceName = strategyConfig.service().getConverterServiceFileName().convert(entityName);

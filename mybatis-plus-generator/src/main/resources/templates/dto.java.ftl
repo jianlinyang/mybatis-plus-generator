@@ -1,7 +1,9 @@
 package ${package.DTO};
 
 <#list table.importPackages as pkg>
+<#if !pkg?contains("baomidou")>
 import ${pkg};
+</#if>
 </#list>
 <#if springdoc>
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,18 +11,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
-<#if entityLombokModel>
-import lombok.Getter;
-import lombok.Setter;
-    <#if chainModel>
+<#if dtoLombokModel>
+import lombok.Data;
+    <#if dtoChainModel>
 import lombok.experimental.Accessors;
     </#if>
-    <#if enableSerialAnnotate>
+</#if>
+<#if enableSerialAnnotate>
 
 import java.io.Serial;
-    </#if>
 </#if>
-
 /**
  * <p>
  * ${table.comment!}
@@ -29,41 +29,34 @@ import java.io.Serial;
  * @author ${author}
  * @since ${date}
  */
-<#if entityLombokModel>
+<#if dtoLombokModel>
 @Data
-    <#if chainModel>
+    <#if dtoChainModel>
 @Accessors(chain = true)
     </#if>
 </#if>
-<#if table.convert>
-@TableName("${schemaName}${table.name}")
-</#if>
 <#if springdoc>
-@Schema(name = "${entity}", description = "${table.comment!}")
+@Schema(name = "${dto}", description = "${table.comment!}")
 <#elseif swagger>
-@ApiModel(value = "${entity}对象", description = "${table.comment!}")
+@ApiModel(value = "${dto}对象", description = "${table.comment!}")
 </#if>
-<#if superEntityClass??>
-public class ${entity} extends ${superEntityClass}<#if activeRecord><${entity}></#if> {
+<#if superDTOClass??>
+public class ${dto} extends ${superDTOClass}<#if activeRecord><${dto}></#if> {
 <#elseif activeRecord>
-public class ${entity} extends Model<${entity}> {
-<#elseif entitySerialVersionUID>
-public class ${entity} implements Serializable {
+public class ${dto} extends Model<${dto}> {
+<#elseif dtoSerialVersionUID>
+public class ${dto} implements Serializable {
 <#else>
-public class ${entity} {
+public class ${dto} {
 </#if>
-<#if entitySerialVersionUID>
+<#if dtoSerialVersionUID>
     <#if enableSerialAnnotate>
     @Serial
     </#if>
     private static final long serialVersionUID = 1L;
 </#if>
 <#-- ----------  BEGIN 字段循环遍历  ---------->
-<#list table.fields as field>
-    <#if field.keyFlag>
-        <#assign keyPropertyName="${field.propertyName}"/>
-    </#if>
-
+<#list dtoFields as field>
     <#if field.comment!?length gt 0>
         <#if springdoc>
     @Schema(description = "${field.comment}")
@@ -75,31 +68,11 @@ public class ${entity} {
      */
         </#if>
     </#if>
-    <#if field.keyFlag>
-        <#-- 普通字段 -->
-    <#elseif field.fill??>
-    <#-- -----   存在字段填充设置   ----->
-        <#if field.convert>
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
-        <#else>
-    @TableField(fill = FieldFill.${field.fill})
-        </#if>
-    <#elseif field.convert>
-    @TableField("${field.annotationColumnName}")
-    </#if>
-    <#-- 乐观锁注解 -->
-    <#if field.versionField>
-    @Version
-    </#if>
-    <#-- 逻辑删除注解 -->
-    <#if field.logicDeleteField>
-    @TableLogic
-    </#if>
     private ${field.propertyType} ${field.propertyName};
 </#list>
 <#------------  END 字段循环遍历  ---------->
-<#if !entityLombokModel>
-    <#list table.fields as field>
+<#if !dtoLombokModel>
+    <#list dtoFields as field>
         <#if field.propertyType == "boolean">
             <#assign getprefix="is"/>
         <#else>
@@ -110,30 +83,30 @@ public class ${entity} {
         return ${field.propertyName};
     }
 
-    <#if chainModel>
-    public ${entity} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    <#if dtoChainModel>
+    public ${dto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     <#else>
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     </#if>
         this.${field.propertyName} = ${field.propertyName};
-        <#if chainModel>
+        <#if dtoChainModel>
         return this;
         </#if>
     }
     </#list>
 </#if>
-<#if entityColumnConstant>
-    <#list table.fields as field>
+<#if dtoColumnConstant>
+    <#list dtoFields as field>
 
     public static final String ${field.name?upper_case} = "${field.name}";
     </#list>
 </#if>
-<#if !entityLombokModel>
+<#if !dtoLombokModel>
 
     @Override
     public String toString() {
-        return "${entity}{" +
-    <#list table.fields as field>
+        return "${dto}{" +
+    <#list dtoFields as field>
         <#if field_index==0>
             "${field.propertyName} = " + ${field.propertyName} +
         <#else>
