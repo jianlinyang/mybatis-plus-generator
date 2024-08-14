@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,11 +116,13 @@ public abstract class AbstractTemplateEngine {
         String dtoName = tableInfo.getDtoName();
         String dtoPath = getPathInfo(OutputFile.dto);
         DTO dto = this.getConfigBuilder().getStrategyConfig().dto();
+        ArrayList<String> dtoList = new ArrayList<>();
         if (dto.isGenerate()) {
             tableInfo.getCrudFieldMap().forEach(
                 (key, value) -> {
                     if (!value.isEmpty()) {
-                        String name = dtoName + key;
+                        String name = dtoName + key + "DTO";
+                        dtoList.add(name);
                         String dtoFile = String.format((dtoPath + File.separator + "%s" + suffixJavaOrKt()), name);
                         objectMap.put("dto", name);
                         objectMap.put("dtoFields", value);
@@ -128,6 +131,7 @@ public abstract class AbstractTemplateEngine {
                 }
             );
         }
+        objectMap.put("dtoList", dtoList);
     }
 
     protected File getOutputFile(String filePath, OutputFile outputFile) {

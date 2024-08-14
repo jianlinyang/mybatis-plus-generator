@@ -34,6 +34,8 @@ public class Main {
                     return new File(path);
                 }
             )
+            .controllerBuilder()
+            .enableFileOverride()
             .entityBuilder()
             .enableLombok()
             .superClass("com.biz.entity.BaseEntity")

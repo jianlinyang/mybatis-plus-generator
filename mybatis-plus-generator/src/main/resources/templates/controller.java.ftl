@@ -1,5 +1,8 @@
 package ${package.Controller};
 
+<#list dtoList as dtoName>
+import ${package.DTO}.${dtoName};
+</#list>
 import org.springframework.web.bind.annotation.RequestMapping;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
