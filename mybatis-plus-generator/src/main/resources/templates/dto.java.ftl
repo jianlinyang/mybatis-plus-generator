@@ -2,6 +2,9 @@ package ${package.DTO};
 
 <#if dtoLombokModel>
 import lombok.Data;
+    <#if superDTOClass??>
+import lombok.EqualsAndHashCode;
+    </#if>
     <#if dtoChainModel>
 import lombok.experimental.Accessors;
     </#if>
@@ -26,6 +29,9 @@ import io.swagger.annotations.ApiModelProperty;
  * @since ${date}
  */
 <#if dtoLombokModel>
+<#if superDTOClass??>
+@EqualsAndHashCode(callSuper = true)
+</#if>
 @Data
     <#if dtoChainModel>
 @Accessors(chain = true)

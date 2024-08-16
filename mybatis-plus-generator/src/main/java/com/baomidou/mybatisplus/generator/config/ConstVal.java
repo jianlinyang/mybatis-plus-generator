@@ -98,7 +98,7 @@ public interface ConstVal {
     String DEFAULT_ID_NAME = "id";
 
     String C = "Create";
-    String R = "Read";
+    String R = "Query";
     String U = "Update";
     String D = "Delete";
 
