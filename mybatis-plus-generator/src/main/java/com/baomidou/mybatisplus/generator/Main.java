@@ -35,7 +35,7 @@ public class Main {
                 }
             )
             .controllerBuilder()
-            .enableFileOverride()
+//            .enableFileOverride()
             .entityBuilder()
             .enableLombok()
             .superClass("com.biz.entity.BaseEntity")
@@ -43,6 +43,7 @@ public class Main {
             .enableFileOverride()
             .dtoBuilder()
             .enableLombok()
+            .superClass("com.biz.dto.BaseDTO")
             .enableFileOverride()
             .build());
         generator.global(GeneratorBuilder.globalConfigBuilder().author("yang").outputDir(workdir).build());

@@ -1,16 +1,5 @@
 package ${package.DTO};
 
-<#list table.importPackages as pkg>
-<#if !pkg?contains("baomidou")>
-import ${pkg};
-</#if>
-</#list>
-<#if springdoc>
-import io.swagger.v3.oas.annotations.media.Schema;
-<#elseif swagger>
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-</#if>
 <#if dtoLombokModel>
 import lombok.Data;
     <#if dtoChainModel>
@@ -21,10 +10,17 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 </#if>
+<#list dtoImportPackages as pkg>
+import ${pkg};
+</#list>
+<#if springdoc>
+import io.swagger.v3.oas.annotations.media.Schema;
+<#elseif swagger>
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+</#if>
 /**
- * <p>
  * ${table.comment!}
- * </p>
  *
  * @author ${author}
  * @since ${date}

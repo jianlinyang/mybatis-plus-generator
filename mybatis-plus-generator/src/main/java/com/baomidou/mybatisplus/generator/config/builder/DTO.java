@@ -15,6 +15,7 @@
  */
 package com.baomidou.mybatisplus.generator.config.builder;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.IFill;
 import com.baomidou.mybatisplus.generator.ITemplate;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -164,6 +166,25 @@ public class DTO implements ITemplate {
     public NamingStrategy getColumnNaming() {
         // 未指定以 naming 策略为准
         return Optional.ofNullable(columnNaming).orElse(naming);
+    }
+
+    /**
+     * 导包处理
+     *
+     * @since 3.5.0
+     */
+    public List<String> importPackage() {
+        List<String> importPackages = new ArrayList<>();
+        String superEntity = getSuperClass();
+        if (StringUtils.isNotBlank(superEntity)) {
+            // 自定义父类
+            importPackages.add(superEntity);
+        }
+        if (isSerialVersionUID()) {
+            importPackages.add(Serializable.class.getCanonicalName());
+        }
+
+        return importPackages;
     }
 
     /**

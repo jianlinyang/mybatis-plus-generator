@@ -26,6 +26,7 @@ import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.builder.Service;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.util.FileUtils;
 import com.baomidou.mybatisplus.generator.util.RuntimeUtils;
 import org.jetbrains.annotations.NotNull;
@@ -126,6 +127,16 @@ public abstract class AbstractTemplateEngine {
                         String dtoFile = String.format((dtoPath + File.separator + "%s" + suffixJavaOrKt()), name);
                         objectMap.put("dto", name);
                         objectMap.put("dtoFields", value);
+                        List<String> dtoImportPackages = dto.importPackage();
+                        value.forEach(
+                            (field) -> {
+                                IColumnType columnType = field.getColumnType();
+                                if (null != columnType && null != columnType.getPkg()) {
+                                    dtoImportPackages.add(columnType.getPkg());
+                                }
+                            }
+                        );
+                        objectMap.put("dtoImportPackages", dtoImportPackages);
                         outputFile(getOutputFile(dtoFile, OutputFile.dto), objectMap, templateFilePath(dto.getJavaTemplate()), getConfigBuilder().getStrategyConfig().entity().isFileOverride());
                     }
                 }
