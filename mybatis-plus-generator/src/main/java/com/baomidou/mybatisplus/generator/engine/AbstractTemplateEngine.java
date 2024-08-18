@@ -15,11 +15,14 @@
  */
 package com.baomidou.mybatisplus.generator.engine;
 
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
 import com.baomidou.mybatisplus.generator.config.builder.Controller;
+import com.baomidou.mybatisplus.generator.config.builder.Converter;
 import com.baomidou.mybatisplus.generator.config.builder.CustomFile;
 import com.baomidou.mybatisplus.generator.config.builder.DTO;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
@@ -104,6 +107,36 @@ public abstract class AbstractTemplateEngine {
         if (entity.isGenerate()) {
             String entityFile = String.format((entityPath + File.separator + "%s" + suffixJavaOrKt()), entityName);
             outputFile(getOutputFile(entityFile, OutputFile.entity), objectMap, templateFilePath(globalConfig.isKotlin() ? entity.getKotlinTemplate() : entity.getJavaTemplate()), getConfigBuilder().getStrategyConfig().entity().isFileOverride());
+        }
+    }
+
+    protected void outputConverter(@NotNull TableInfo tableInfo, @NotNull Map<String, Object> objectMap) {
+        String converterName = tableInfo.getConverterName();
+        String converterPath = getPathInfo(OutputFile.converter);
+        Converter converter = this.getConfigBuilder().getStrategyConfig().converter();
+        List dtoList = (List) objectMap.get("dtoList");
+        List<String> allClass = new ArrayList<>();
+        List<String> convertMethods = new ArrayList<>();
+        for (Object o : dtoList) {
+            allClass.add(String.valueOf(o));
+        }
+        allClass.add(tableInfo.getEntityName());
+        for (String aClass1 : allClass) {
+            for (String aClass2 : allClass) {
+                if (!aClass1.endsWith("DTO")) {
+                    convertMethods.add(StrUtil.format("{} to{}({} object);", aClass1, "Entity", aClass2));
+                } else {
+                    String s = ReUtil.get("Create|Update|Query", aClass1, 0);
+                    if (StrUtil.isNotBlank(s)) {
+                        convertMethods.add(StrUtil.format("{} to{}({} object);", aClass1, s, aClass2));
+                    }
+                }
+            }
+        }
+        objectMap.put("convertMethods", convertMethods);
+        if (converter.isGenerate()) {
+            String entityFile = String.format((converterPath + File.separator + "%s" + suffixJavaOrKt()), converterName);
+            outputFile(getOutputFile(entityFile, OutputFile.converter), objectMap, templateFilePath(converter.getJavaTemplate()), getConfigBuilder().getStrategyConfig().entity().isFileOverride());
         }
     }
 
@@ -291,6 +324,7 @@ public abstract class AbstractTemplateEngine {
                 outputEntity(tableInfo, objectMap);
                 // dto
                 outputDTO(tableInfo, objectMap);
+                outputConverter(tableInfo, objectMap);
                 // mapper and xml
                 outputMapper(tableInfo, objectMap);
                 // service

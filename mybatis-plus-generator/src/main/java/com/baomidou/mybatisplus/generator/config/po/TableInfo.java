@@ -16,7 +16,12 @@
 package com.baomidou.mybatisplus.generator.config.po;
 
 import cn.hutool.core.map.MapBuilder;
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
@@ -30,7 +35,13 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 
@@ -86,6 +97,9 @@ public class TableInfo {
      */
     @Getter
     private String dtoName;
+
+    @Getter
+    private String converterName;
     /**
      * mapper名称
      */
@@ -308,6 +322,7 @@ public class TableInfo {
         this.serviceName = strategyConfig.service().getConverterServiceFileName().convert(entityName);
         this.serviceImplName = strategyConfig.service().getConverterServiceImplFileName().convert(entityName);
         this.controllerName = strategyConfig.controller().getConverterFileName().convert(entityName);
+        this.converterName = strategyConfig.converter().getConverterFileName().convert(entityName);
         this.importPackage();
     }
 

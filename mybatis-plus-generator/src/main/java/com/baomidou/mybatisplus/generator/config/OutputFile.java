@@ -25,6 +25,7 @@ public enum OutputFile {
     entity,
     dto,
     service,
+    converter,
     serviceImpl,
     mapper,
     xml,

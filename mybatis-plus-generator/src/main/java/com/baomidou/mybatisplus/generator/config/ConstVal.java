@@ -34,6 +34,7 @@ public interface ConstVal {
     String SERVICE_IMPL = "ServiceImpl";
     String MAPPER = "Mapper";
     String DTO = "DTO";
+    String CONVERTER = "Converter";
     String XML = "Xml";
     String CONTROLLER = "Controller";
     String PARENT = "Parent";
@@ -54,6 +55,7 @@ public interface ConstVal {
      * dto模板路径
      */
     String TEMPLATE_DTO_JAVA = "/templates/dto.java";
+    String TEMPLATE_CONVERTER_JAVA = "/templates/converter.java";
 
     /**
      * 实体模板路径(kotlin模板)

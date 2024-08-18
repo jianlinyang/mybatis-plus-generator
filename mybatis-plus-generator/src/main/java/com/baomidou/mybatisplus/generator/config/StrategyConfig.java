@@ -123,6 +123,7 @@ public class StrategyConfig {
 
     private final Entity.Builder entityBuilder = new Entity.Builder(this);
     private final DTO.Builder dtoBuilder = new DTO.Builder(this);
+    private final Converter.Builder converterBuilder = new Converter.Builder(this);
 
     private final Controller.Builder controllerBuilder = new Controller.Builder(this);
 
@@ -132,6 +133,7 @@ public class StrategyConfig {
 
     private Entity entity;
     private DTO dto;
+    private Converter converter;
 
     private Controller controller;
 
@@ -154,6 +156,10 @@ public class StrategyConfig {
     @NotNull
     public DTO.Builder dtoBuilder() {
         return dtoBuilder;
+    }
+    @NotNull
+    public Converter.Builder converterBuilder() {
+        return converterBuilder;
     }
     /**
      * 实体配置
@@ -182,6 +188,14 @@ public class StrategyConfig {
             this.dto = dtoBuilder.get();
         }
         return dto;
+    }
+
+    @NotNull
+    public Converter converter() {
+        if (converter == null) {
+            this.converter = converterBuilder.get();
+        }
+        return converter;
     }
     /**
      * 控制器配置构建者

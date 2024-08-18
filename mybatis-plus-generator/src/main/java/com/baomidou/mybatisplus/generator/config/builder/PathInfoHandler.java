@@ -99,6 +99,10 @@ class PathInfoHandler {
         if (dto.isGenerate()) {
             putPathInfo(dto.getJavaTemplate(), OutputFile.dto, ConstVal.DTO);
         }
+        Converter converter = strategyConfig.converter();
+        if (converter.isGenerate()) {
+            putPathInfo(converter.getJavaTemplate(), OutputFile.converter, ConstVal.CONVERTER);
+        }
         putPathInfo(OutputFile.parent, ConstVal.PARENT);
     }
 

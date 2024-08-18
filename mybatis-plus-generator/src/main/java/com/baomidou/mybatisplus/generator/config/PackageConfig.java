@@ -93,6 +93,8 @@ public class PackageConfig {
      */
     @Getter
     private String dto = "dto";
+    @Getter
+    private String converter = "converter";
     /**
      * 包配置信息
      *
@@ -138,6 +140,7 @@ public class PackageConfig {
             packageInfo.put(ConstVal.XML, this.joinPackage(this.getXml()));
             packageInfo.put(ConstVal.SERVICE, this.joinPackage(this.getService()));
             packageInfo.put(ConstVal.DTO, this.joinPackage(this.getDto()));
+            packageInfo.put(ConstVal.CONVERTER, this.joinPackage(this.getConverter()));
             packageInfo.put(ConstVal.SERVICE_IMPL, this.joinPackage(this.getServiceImpl()));
             packageInfo.put(ConstVal.CONTROLLER, this.joinPackage(this.getController()));
             packageInfo.put(ConstVal.PARENT, this.getParent());
@@ -219,6 +222,7 @@ public class PackageConfig {
             this.packageConfig.service = service;
             return this;
         }
+
         /**
          * dto 包名
          */
@@ -226,6 +230,7 @@ public class PackageConfig {
             this.packageConfig.dto = dto;
             return this;
         }
+
         /**
          * service实现类包名
          *

@@ -45,6 +45,8 @@ public class Main {
             .enableLombok()
             .superClass("com.biz.dto.BaseDTO")
             .enableFileOverride()
+            .converterBuilder()
+            .enableFileOverride()
             .build());
         generator.global(GeneratorBuilder.globalConfigBuilder().author("yang").outputDir(workdir).build());
         generator.packageInfo(GeneratorBuilder.packageConfigBuilder()

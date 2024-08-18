@@ -42,7 +42,10 @@ public class BaseBuilder implements IConfigBuilder<StrategyConfig> {
     public DTO.Builder dtoBuilder() {
         return strategyConfig.dtoBuilder();
     }
-
+    @NotNull
+    public Converter.Builder converterBuilder() {
+        return strategyConfig.converterBuilder();
+    }
     @NotNull
     public Controller.Builder controllerBuilder() {
         return strategyConfig.controllerBuilder();
