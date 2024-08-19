@@ -10,8 +10,9 @@ import ${package.DTO}.${dtoName};
 import ${idInfoPackage};
 import ${pageInfoPackage};
 import ${responsePackage};
-import ${package.Entity}.${tableInfo.entityName};
-import ${package.Service}.${tableInfo.serviceName};
+import ${package.Entity}.${table.entityName};
+import ${package.Service}.${table.serviceName};
+import ${package.Converter}.${table.converterName};
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,59 +56,64 @@ public class ${table.controllerName} extends ${superControllerClass} {
 public class ${table.controllerName} {
 </#if>
 
-    private final ISysUserService sysUserService;
-    private final SysUserConverter sysUserConverter;
+    private final ${table.serviceName} ${entityLowerFirst}Service;
+    private final ${table.converterName} ${entityLowerFirst}Converter;
+<#if createDTO??>
 
     /**
      * 新增
      */
     @PostMapping("/create")
     @Transactional(rollbackFor = Exception.class)
-    public Response<Long> save(@Valid @RequestBody SysUserCreateDTO createDTO) {
-        SysUser entity = sysUserConverter.toEntity(createDTO);
-        sysUserService.save(entity);
-        return Response.success(entity.getId());
+    public Response<Long> save(@Valid @RequestBody ${createDTO} createDTO) {
+        ${entity} entity = ${entityLowerFirst}Converter.toEntity(createDTO);
+        ${entityLowerFirst}Service.save(entity);
+        return Response.success(entity.get${table.primaryColumn}());
     }
+</#if>
+<#if queryDTO??>
 
     /**
      * 查询单个记录
      */
     @GetMapping("/query")
-    public Response<SysUserQueryDTO> query(@Valid SysUserQueryDTO queryDTO) {
-        QueryWrapper<SysUser> query = Wrappers.query();
+    public Response<${queryDTO}> query(@Valid ${queryDTO} queryDTO) {
+        QueryWrapper<${entity}> query = Wrappers.query();
         Map<String, Object> condition = BeanUtil.beanToMap(queryDTO, true, true);
         query.allEq(condition, false);
-        SysUser entity = sysUserService.getOne(query, false);
-        SysUserQueryDTO readDTO = sysUserConverter.toQuery(entity);
-        return Response.success(readDTO);
+        ${entity} entity = ${entityLowerFirst}Service.getOne(query, false);
+        return Response.success(${entityLowerFirst}Converter.toQuery(entity));
     }
 
     /**
      * 查询列表
      */
     @GetMapping("/list")
-    public Response<List<SysUserQueryDTO>> list(@Valid SysUserQueryDTO queryDTO, PageInfo pageInfo) {
-        QueryWrapper<SysUser> query = Wrappers.query();
+    public Response<List<${queryDTO}>> list(@Valid ${queryDTO} queryDTO, PageInfo pageInfo) {
+        QueryWrapper<${entity}> query = Wrappers.query();
         Map<String, Object> condition = BeanUtil.beanToMap(queryDTO, true, true);
         query.allEq(condition, false);
         if (pageInfo.getPageNumber() == null || pageInfo.getPageSize() == null) {
-            return Response.success(sysUserService.list(query).stream().map(sysUserConverter::toQuery).collect(Collectors.toList()));
+            return Response.success(${entityLowerFirst}Service.list(query).stream().map(${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()));
         } else {
-            Page<SysUser> page = new Page<>(pageInfo.getPageNumber(), pageInfo.getPageSize());
-            return Response.success(sysUserService.list(page, query).stream().map(sysUserConverter::toQuery).collect(Collectors.toList()), page.getTotal());
+            Page<${entity}> page = new Page<>(pageInfo.getPageNumber(), pageInfo.getPageSize());
+            return Response.success(${entityLowerFirst}Service.list(page, query).stream().map(${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()), page.getTotal());
         }
     }
+</#if>
 
+<#if updateDTO??>
     /**
      * 修改
      */
     @PostMapping("/update")
     @Transactional(rollbackFor = Exception.class)
-    public Response<String> update(@Valid @RequestBody SysUserUpdateDTO createDTO) {
-        SysUser entity = sysUserConverter.toEntity(createDTO);
-        sysUserService.updateById(entity);
+    public Response<String> update(@Valid @RequestBody ${updateDTO} updateDTO) {
+        ${entity} entity = ${entityLowerFirst}Converter.toEntity(updateDTO);
+        ${entityLowerFirst}Service.updateById(entity);
         return Response.success("修改成功");
     }
+</#if>
 
     /**
      * 删除
@@ -115,10 +121,10 @@ public class ${table.controllerName} {
     @PostMapping("/delete")
     public Response<String> delete(@RequestBody IdInfo idInfo) {
         if (idInfo.getId() != null) {
-            sysUserService.removeById(idInfo.getId());
+            ${entityLowerFirst}Service.removeById(idInfo.getId());
         }
         if (idInfo.getIds() != null) {
-            sysUserService.removeBatchByIds(idInfo.getIds());
+            ${entityLowerFirst}Service.removeBatchByIds(idInfo.getIds());
         }
         return Response.success("删除成功");
     }

@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Main {
@@ -35,15 +36,16 @@ public class Main {
                 }
             )
             .controllerBuilder()
-//            .enableFileOverride()
+            .enableRestStyle()
+            .enableFileOverride()
             .entityBuilder()
             .enableLombok()
-            .superClass("com.biz.entity.BaseEntity")
+            .superClass("com.test.common.BaseEntity")
             .addSuperEntityColumns("create_time", "update_time")
             .enableFileOverride()
             .dtoBuilder()
             .enableLombok()
-            .superClass("com.biz.dto.BaseDTO")
+            .superClass("com.test.common.BaseDTO")
             .enableFileOverride()
             .converterBuilder()
             .enableFileOverride()
@@ -52,6 +54,13 @@ public class Main {
         generator.packageInfo(GeneratorBuilder.packageConfigBuilder()
             .parent(packageName)
             .xml("mapper")
+            .build());
+        HashMap<String, Object> customMap = new HashMap<>();
+        customMap.put("idInfoPackage", "com.test.common.IdInfo");
+        customMap.put("pageInfoPackage", "com.test.common.PageInfo");
+        customMap.put("responsePackage", "com.test.common.Response");
+        generator.injection(GeneratorBuilder.injectionConfigBuilder()
+            .customMap(customMap)
             .build());
         generator.execute(new FreemarkerTemplateEngine(), false);
     }

@@ -15,7 +15,7 @@
  */
 package com.baomidou.mybatisplus.generator.config.po;
 
-import cn.hutool.core.map.MapBuilder;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -24,7 +24,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.GlobalConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
@@ -32,15 +31,14 @@ import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.config.builder.Service;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -155,6 +153,8 @@ public class TableInfo {
      * 实体
      */
     private final Entity entity;
+    @Getter
+    private String primaryColumn;
 
     /**
      * 构造方法
@@ -356,5 +356,16 @@ public class TableInfo {
     @Deprecated
     public boolean isServiceInterface() {
         return globalConfig.isServiceInterface();
+    }
+
+    /**
+     * 推到主键
+     */
+    public void detectPrimaryColumn() {
+        fields.forEach(field -> {
+            if (field.isKeyIdentityFlag()) {
+                primaryColumn = field.getCapitalName();
+            }
+        });
     }
 }

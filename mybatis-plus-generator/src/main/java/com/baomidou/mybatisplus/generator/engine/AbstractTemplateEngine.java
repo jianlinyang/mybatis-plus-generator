@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.generator.config.builder.DTO;
 import com.baomidou.mybatisplus.generator.config.builder.Entity;
 import com.baomidou.mybatisplus.generator.config.builder.Mapper;
 import com.baomidou.mybatisplus.generator.config.builder.Service;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.IColumnType;
 import com.baomidou.mybatisplus.generator.util.FileUtils;
@@ -152,7 +153,8 @@ public abstract class AbstractTemplateEngine {
         DTO dto = this.getConfigBuilder().getStrategyConfig().dto();
         ArrayList<String> dtoList = new ArrayList<>();
         if (dto.isGenerate()) {
-            dto.generatecrudFieldMap(tableInfo).forEach(
+            Map<String, List<TableField>> fieldMap = dto.generatecrudFieldMap(tableInfo);
+            fieldMap.forEach(
                 (key, value) -> {
                     if (!value.isEmpty()) {
                         String name = dtoName + key + "DTO";
@@ -160,6 +162,7 @@ public abstract class AbstractTemplateEngine {
                         String dtoFile = String.format((dtoPath + File.separator + "%s" + suffixJavaOrKt()), name);
                         objectMap.put("dto", name);
                         objectMap.put("dtoFields", value);
+                        objectMap.put(key.toLowerCase() + "DTO", name);
                         List<String> dtoImportPackages = dto.importPackage();
                         value.forEach(
                             (field) -> {
@@ -313,6 +316,7 @@ public abstract class AbstractTemplateEngine {
             ConfigBuilder config = this.getConfigBuilder();
             List<TableInfo> tableInfoList = config.getTableInfoList();
             tableInfoList.forEach(tableInfo -> {
+                tableInfo.detectPrimaryColumn();
                 Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
                 Optional.ofNullable(config.getInjectionConfig()).ifPresent(t -> {
                     // 添加自定义属性
@@ -407,7 +411,7 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("schemaName", schemaName);
         objectMap.put("table", tableInfo);
         objectMap.put("entity", tableInfo.getEntityName());
-        objectMap.put("entityLowerFirst", StrUtil.toCamelCase(tableInfo.getEntityName()));
+        objectMap.put("entityLowerFirst", StrUtil.lowerFirst(tableInfo.getEntityName()));
         return objectMap;
     }
 

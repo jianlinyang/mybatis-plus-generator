@@ -16,10 +16,7 @@
 package com.baomidou.mybatisplus.generator.config.po;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.map.MapBuilder;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.setting.SettingUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -40,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 表字段信息
@@ -201,11 +197,6 @@ public class TableField {
         if (StrUtil.equals(type, "String")) {
             this.validAnnotations.add(StrUtil.format("@Size(max = {})", metaInfo.getLength()));
 //            this.validAnnotationsImport.add("import jakarta.validation.constraints.Size");
-        } else if (numberTypeSet.contains(type)) {
-            this.validAnnotations.add(StrUtil.format("@Max({}.MAX_VALUE)", type));
-            this.validAnnotations.add(StrUtil.format("@Min({}.MIN_VALUE)", type));
-//            this.validAnnotationsImport.add("import jakarta.validation.constraints.Max");
-//            this.validAnnotationsImport.add("import jakarta.validation.constraints.Min");
         }
     }
 
