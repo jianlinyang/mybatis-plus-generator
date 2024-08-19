@@ -155,16 +155,6 @@ public class TableInfo {
      * 实体
      */
     private final Entity entity;
-    /**
-     * crud DTO字段信息
-     */
-    @Getter
-    private final Map<String, List<TableField>> crudFieldMap = MapBuilder.<String, List<TableField>>create(new TreeMap<>())
-        .put(ConstVal.C, new ArrayList<>())
-        .put(ConstVal.D, new ArrayList<>())
-        .put(ConstVal.R, new ArrayList<>())
-        .put(ConstVal.U, new ArrayList<>())
-        .build();
 
     /**
      * 构造方法

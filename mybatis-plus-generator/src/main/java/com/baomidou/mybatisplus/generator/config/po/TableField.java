@@ -15,9 +15,11 @@
  */
 package com.baomidou.mybatisplus.generator.config.po;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.map.MapBuilder;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.setting.SettingUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -34,11 +36,11 @@ import lombok.Getter;
 import org.apache.ibatis.type.JdbcType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * 表字段信息
@@ -88,6 +90,10 @@ public class TableField {
      * 字段注释
      */
     private String comment;
+    @Getter
+    private String metaComment;
+    @Getter
+    private List<String> validAnnotations = new ArrayList<>();
 
     /**
      * 填充
@@ -112,13 +118,6 @@ public class TableField {
      * 自定义查询字段列表
      */
     private Map<String, Object> customMap;
-    /**
-     * crud DTO字段信息
-     */
-    @Getter
-    private final HashSet<String> crudDTOProperties = new HashSet<>();
-
-    private static final String CRUD_PATTERN = "[curd]+$";
 
     /**
      * 字段元数据信息
@@ -190,6 +189,24 @@ public class TableField {
         }
         this.propertyName = propertyName;
         return this;
+    }
+
+    private final HashSet<String> numberTypeSet = CollectionUtil.newHashSet("Byte", "Short", "Integer", "Long");
+
+    /**
+     * 生成字段校验注解
+     */
+    public void generateValidAnnotation() {
+        String type = columnType.getType();
+        if (StrUtil.equals(type, "String")) {
+            this.validAnnotations.add(StrUtil.format("@Size(max = {})", metaInfo.getLength()));
+//            this.validAnnotationsImport.add("import jakarta.validation.constraints.Size");
+        } else if (numberTypeSet.contains(type)) {
+            this.validAnnotations.add(StrUtil.format("@Max({}.MAX_VALUE)", type));
+            this.validAnnotations.add(StrUtil.format("@Min({}.MIN_VALUE)", type));
+//            this.validAnnotationsImport.add("import jakarta.validation.constraints.Max");
+//            this.validAnnotationsImport.add("import jakarta.validation.constraints.Min");
+        }
     }
 
     public String getPropertyType() {
@@ -282,39 +299,17 @@ public class TableField {
     }
 
     public TableField setComment(String comment) {
-        this.comment = this.globalConfig.isSwagger()
+        comment = this.globalConfig.isSwagger()
             && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
-        processComment();
-        return this;
-    }
-
-    private void processComment() {
-        if (StringUtils.isNotBlank(this.comment)) {
-            String strip = StrUtil.strip(this.comment, " ");
-            if ("id".equals(strip)) {
-                return;
-            }
-            String s = ReUtil.get(CRUD_PATTERN, strip, 0);
-            this.comment = this.comment.replaceAll(CRUD_PATTERN, "");
-            if (StringUtils.isNotBlank(s)) {
-                this.crudDTOProperties.addAll(Arrays.stream(s.split("")).map(
-                    x -> {
-                        switch (x) {
-                            case "c":
-                                return ConstVal.C;
-                            case "u":
-                                return ConstVal.U;
-                            case "r":
-                                return ConstVal.R;
-                            case "d":
-                                return ConstVal.D;
-                            default:
-                                return null;
-                        }
-                    }
-                ).filter(StrUtil::isNotBlank).collect(Collectors.toList()));
-            }
+        if (comment.contains("#")) {
+            String[] split = comment.split("#");
+            this.comment = split[0];
+            this.metaComment = split[1];
+        } else {
+            this.comment = comment;
+            this.metaComment = "";
         }
+        return this;
     }
 
     public TableField setColumnName(String columnName) {

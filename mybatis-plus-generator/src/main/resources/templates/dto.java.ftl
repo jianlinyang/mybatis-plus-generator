@@ -1,5 +1,6 @@
 package ${package.DTO};
 
+import jakarta.validation.constraints.*;
 <#if dtoLombokModel>
 import lombok.Data;
     <#if superDTOClass??>
@@ -22,6 +23,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 </#if>
+import java.util.Map;
+import java.util.TreeMap;
 /**
  * ${table.comment!}
  *
@@ -70,6 +73,9 @@ public class ${dto} {
      */
         </#if>
     </#if>
+    <#list field.validAnnotations as validannotation>
+    ${validannotation}
+    </#list>
     private ${field.propertyType} ${field.propertyName};
 </#list>
 <#------------  END 字段循环遍历  ---------->
@@ -118,4 +124,14 @@ public class ${dto} {
         "}";
     }
 </#if>
+    /**
+    * 字段名与注释的映射
+    */
+    public static Map<String, String> fields = new TreeMap<>();
+
+    static {
+<#list dtoFields as field>
+        fields.put("${field.propertyName}", "${field.comment}");
+</#list>
+    }
 }

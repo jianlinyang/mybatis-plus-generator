@@ -15,12 +15,15 @@
  */
 package com.baomidou.mybatisplus.generator.config.builder;
 
+import cn.hutool.core.map.MapBuilder;
+import cn.hutool.core.util.ReUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.IFill;
 import com.baomidou.mybatisplus.generator.ITemplate;
 import com.baomidou.mybatisplus.generator.config.ConstVal;
 import com.baomidou.mybatisplus.generator.config.INameConvert;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
+import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.function.ConverterFileName;
@@ -40,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * DTO属性配置
@@ -238,6 +242,42 @@ public class DTO implements ITemplate {
         data.put("superDTOClass", ClassUtils.getSimpleName(this.superClass));
         return data;
     }
+
+    public Map<String, List<TableField>> generatecrudFieldMap(TableInfo tableInfo) {
+        Map<String, List<TableField>> crudFieldMap = MapBuilder.<String, List<TableField>>create(new TreeMap<>())
+            .put(ConstVal.C, new ArrayList<>())
+            .put(ConstVal.D, new ArrayList<>())
+            .put(ConstVal.R, new ArrayList<>())
+            .put(ConstVal.U, new ArrayList<>())
+            .build();
+        for (TableField field : tableInfo.getFields()) {
+            field.generateValidAnnotation();
+            String metaComment = field.getMetaComment();
+            String s = ReUtil.get("[crud]+", metaComment, 0);
+            if (StringUtils.isNotBlank(s)) {
+                for (String t : s.split("")) {
+                    switch (t) {
+                        case "c":
+                            crudFieldMap.get(ConstVal.C).add(field);
+                            break;
+                        case "u":
+                            crudFieldMap.get(ConstVal.R).add(field);
+                            break;
+                        case "r":
+                            crudFieldMap.get(ConstVal.U).add(field);
+                            break;
+                        case "d":
+                            crudFieldMap.get(ConstVal.D).add(field);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        return crudFieldMap;
+    }
+
 
     public static class Builder extends BaseBuilder {
 

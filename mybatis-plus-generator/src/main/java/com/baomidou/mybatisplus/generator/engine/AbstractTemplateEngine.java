@@ -126,7 +126,7 @@ public abstract class AbstractTemplateEngine {
                 if (!aClass1.endsWith("DTO")) {
                     convertMethods.add(StrUtil.format("{} to{}({} object);", aClass1, "Entity", aClass2));
                 } else {
-                    String s = ReUtil.get("Create|Update|Query", aClass1, 0);
+                    String s = ReUtil.get(StrUtil.format("{}|{}|{}", ConstVal.C, ConstVal.R, ConstVal.U), aClass1, 0);
                     if (StrUtil.isNotBlank(s)) {
                         convertMethods.add(StrUtil.format("{} to{}({} object);", aClass1, s, aClass2));
                     }
@@ -152,7 +152,7 @@ public abstract class AbstractTemplateEngine {
         DTO dto = this.getConfigBuilder().getStrategyConfig().dto();
         ArrayList<String> dtoList = new ArrayList<>();
         if (dto.isGenerate()) {
-            tableInfo.getCrudFieldMap().forEach(
+            dto.generatecrudFieldMap(tableInfo).forEach(
                 (key, value) -> {
                     if (!value.isEmpty()) {
                         String name = dtoName + key + "DTO";
