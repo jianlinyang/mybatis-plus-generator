@@ -407,6 +407,7 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("schemaName", schemaName);
         objectMap.put("table", tableInfo);
         objectMap.put("entity", tableInfo.getEntityName());
+        objectMap.put("entityLowerFirst", StrUtil.toCamelCase(tableInfo.getEntityName()));
         return objectMap;
     }
 
