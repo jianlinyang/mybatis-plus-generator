@@ -124,6 +124,9 @@ public abstract class AbstractTemplateEngine {
         allClass.add(tableInfo.getEntityName());
         for (String aClass1 : allClass) {
             for (String aClass2 : allClass) {
+                if (StrUtil.equals(aClass1, aClass2)) {
+                    continue;
+                }
                 if (!aClass1.endsWith("DTO")) {
                     convertMethods.add(StrUtil.format("{} to{}({} object);", aClass1, "Entity", aClass2));
                 } else {
@@ -153,6 +156,8 @@ public abstract class AbstractTemplateEngine {
         DTO dto = this.getConfigBuilder().getStrategyConfig().dto();
         ArrayList<String> dtoList = new ArrayList<>();
         if (dto.isGenerate()) {
+            objectMap.put("dtoEnableIdEncrypt", dto.isEnableIdEncrypt());
+            objectMap.put("dtoHasId", false);
             Map<String, List<TableField>> fieldMap = dto.generatecrudFieldMap(tableInfo);
             fieldMap.forEach(
                 (key, value) -> {
@@ -169,6 +174,9 @@ public abstract class AbstractTemplateEngine {
                                 IColumnType columnType = field.getColumnType();
                                 if (null != columnType && null != columnType.getPkg()) {
                                     dtoImportPackages.add(columnType.getPkg());
+                                }
+                                if (field.isKeyIdentityFlag()) {
+                                    objectMap.put("dtoHasId", true);
                                 }
                             }
                         );
@@ -328,6 +336,7 @@ public abstract class AbstractTemplateEngine {
                 outputEntity(tableInfo, objectMap);
                 // dto
                 outputDTO(tableInfo, objectMap);
+                // converter
                 outputConverter(tableInfo, objectMap);
                 // mapper and xml
                 outputMapper(tableInfo, objectMap);
@@ -411,7 +420,6 @@ public abstract class AbstractTemplateEngine {
         objectMap.put("schemaName", schemaName);
         objectMap.put("table", tableInfo);
         objectMap.put("entity", tableInfo.getEntityName());
-        objectMap.put("entityLowerFirst", StrUtil.lowerFirst(tableInfo.getEntityName()));
         return objectMap;
     }
 

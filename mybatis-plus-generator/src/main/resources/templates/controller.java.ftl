@@ -55,7 +55,7 @@ public class ${table.controllerName} extends ${superControllerClass} {
 <#else>
 public class ${table.controllerName} {
 </#if>
-
+    <#assign entityLowerFirst = entity?uncap_first>
     private final ${table.serviceName} ${entityLowerFirst}Service;
     private final ${table.converterName} ${entityLowerFirst}Converter;
 <#if createDTO??>
@@ -82,7 +82,7 @@ public class ${table.controllerName} {
         Map<String, Object> condition = BeanUtil.beanToMap(queryDTO, true, true);
         query.allEq(condition, false);
         ${entity} entity = ${entityLowerFirst}Service.getOne(query, false);
-        return Response.success(${entityLowerFirst}Converter.toQuery(entity));
+        return Response.success(${entityLowerFirst}Converter.toQuery(entity), ${queryDTO}.columnsMapping);
     }
 
     /**
@@ -94,10 +94,12 @@ public class ${table.controllerName} {
         Map<String, Object> condition = BeanUtil.beanToMap(queryDTO, true, true);
         query.allEq(condition, false);
         if (pageInfo.getPageNumber() == null || pageInfo.getPageSize() == null) {
-            return Response.success(${entityLowerFirst}Service.list(query).stream().map(${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()));
+            return Response.success(${entityLowerFirst}Service.list(query).stream().map(
+                    ${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()), ${queryDTO}.columnsMapping);
         } else {
             Page<${entity}> page = new Page<>(pageInfo.getPageNumber(), pageInfo.getPageSize());
-            return Response.success(${entityLowerFirst}Service.list(page, query).stream().map(${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()), page.getTotal());
+            return Response.success(${entityLowerFirst}Service.list(page, query).stream().map(
+                    ${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()), page.getTotal(), ${queryDTO}.columnsMapping);
         }
     }
 </#if>
@@ -119,6 +121,7 @@ public class ${table.controllerName} {
      * 删除
      */
     @PostMapping("/delete")
+    @Transactional(rollbackFor = Exception.class)
     public Response<String> delete(@RequestBody IdInfo idInfo) {
         if (idInfo.getId() != null) {
             ${entityLowerFirst}Service.removeById(idInfo.getId());

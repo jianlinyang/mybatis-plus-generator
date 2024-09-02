@@ -39,11 +39,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * DTO属性配置
@@ -165,6 +165,11 @@ public class DTO implements ITemplate {
      */
     @Getter
     private boolean generate = true;
+    /**
+     * 是否开启id加密
+     */
+    @Getter
+    private boolean enableIdEncrypt = false;
 
     @NotNull
     public NamingStrategy getColumnNaming() {
@@ -244,7 +249,7 @@ public class DTO implements ITemplate {
     }
 
     public Map<String, List<TableField>> generatecrudFieldMap(TableInfo tableInfo) {
-        Map<String, List<TableField>> crudFieldMap = MapBuilder.<String, List<TableField>>create(new TreeMap<>())
+        Map<String, List<TableField>> crudFieldMap = MapBuilder.<String, List<TableField>>create(new LinkedHashMap<>())
             .put(ConstVal.C, new ArrayList<>())
             .put(ConstVal.D, new ArrayList<>())
             .put(ConstVal.R, new ArrayList<>())
@@ -361,6 +366,14 @@ public class DTO implements ITemplate {
          */
         public Builder enableLombok() {
             this.dto.lombok = true;
+            return this;
+        }
+
+        /**
+         * 开启id加密
+         */
+        public Builder enableIdEncrypt() {
+            this.dto.enableIdEncrypt = true;
             return this;
         }
 

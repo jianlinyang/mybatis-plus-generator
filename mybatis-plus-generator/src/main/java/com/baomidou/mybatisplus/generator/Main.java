@@ -44,6 +44,7 @@ public class Main {
             .addSuperEntityColumns("create_time", "update_time")
             .enableFileOverride()
             .dtoBuilder()
+            .enableIdEncrypt()
             .enableLombok()
             .superClass("com.test.common.BaseDTO")
             .enableFileOverride()

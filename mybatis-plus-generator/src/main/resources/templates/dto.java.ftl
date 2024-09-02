@@ -1,5 +1,8 @@
 package ${package.DTO};
 
+<#if dtoEnableIdEncrypt && dtoHasId>
+import com.fasterxml.jackson.annotation.JsonIgnore;
+</#if>
 import jakarta.validation.constraints.*;
 <#if dtoLombokModel>
 import lombok.Data;
@@ -62,6 +65,7 @@ public class ${dto} {
 </#if>
 <#-- ----------  BEGIN 字段循环遍历  ---------->
 <#list dtoFields as field>
+
     <#if field.comment!?length gt 0>
         <#if springdoc>
     @Schema(description = "${field.comment}")
@@ -76,11 +80,15 @@ public class ${dto} {
     <#list field.validAnnotations as validannotation>
     ${validannotation}
     </#list>
+    <#if field.keyIdentityFlag && dtoEnableIdEncrypt>
+    @JsonIgnore
+    </#if>
     private ${field.propertyType} ${field.propertyName};
 </#list>
 <#------------  END 字段循环遍历  ---------->
 <#if !dtoLombokModel>
     <#list dtoFields as field>
+        <#if !(field.keyIdentityFlag && dtoEnableIdEncrypt)>
         <#if field.propertyType == "boolean">
             <#assign getprefix="is"/>
         <#else>
@@ -101,6 +109,7 @@ public class ${dto} {
         return this;
         </#if>
     }
+        </#if>
     </#list>
 </#if>
 <#if dtoColumnConstant>
@@ -124,14 +133,41 @@ public class ${dto} {
         "}";
     }
 </#if>
+<#if dtoEnableIdEncrypt && dtoHasId>
+
     /**
-    * 字段名与注释的映射
-    */
-    public static Map<String, String> fields = new TreeMap<>();
+     * id字符串
+     */
+    private String strId;
+
+    <#assign primaryColumn = table.primaryColumn?uncap_first>
+    public Long get${table.primaryColumn}() {
+        if (${primaryColumn} == null && strId != null && !strId.isEmpty()) {
+            ${primaryColumn} = decryptId(strId);
+            strId = null;
+        }
+        return ${primaryColumn};
+    }
+
+    public void set${table.primaryColumn}(Long id) {
+        this.${primaryColumn} = id;
+        this.strId = encryptId(id);
+    }
+</#if>
+
+    /**
+     * 字段名与注释的映射
+     */
+    public static Map<String, String> columnsMapping = new TreeMap<>();
 
     static {
 <#list dtoFields as field>
-        fields.put("${field.propertyName}", "${field.comment}");
+    <#if !(dtoEnableIdEncrypt && field.keyIdentityFlag)>
+        columnsMapping.put("${field.propertyName}", "${field.comment}");
+    </#if>
 </#list>
+<#if dtoEnableIdEncrypt && dtoHasId>
+        columnsMapping.put("strId", "id");
+</#if>
     }
 }
