@@ -82,7 +82,7 @@ public class ${table.controllerName} {
         Map<String, Object> condition = BeanUtil.beanToMap(queryDTO, true, true);
         query.allEq(condition, false);
         ${entity} entity = ${entityLowerFirst}Service.getOne(query, false);
-        return Response.success(${entityLowerFirst}Converter.toQuery(entity), ${queryDTO}.columnsMapping);
+        return Response.success(${entityLowerFirst}Converter.toQuery(entity));
     }
 
     /**
@@ -95,11 +95,11 @@ public class ${table.controllerName} {
         query.allEq(condition, false);
         if (pageInfo.getPageNumber() == null || pageInfo.getPageSize() == null) {
             return Response.success(${entityLowerFirst}Service.list(query).stream().map(
-                    ${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()), ${queryDTO}.columnsMapping);
+                    ${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()));
         } else {
             Page<${entity}> page = new Page<>(pageInfo.getPageNumber(), pageInfo.getPageSize());
             return Response.success(${entityLowerFirst}Service.list(page, query).stream().map(
-                    ${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()), page.getTotal(), ${queryDTO}.columnsMapping);
+                    ${entityLowerFirst}Converter::toQuery).collect(Collectors.toList()), page.getTotal());
         }
     }
 </#if>

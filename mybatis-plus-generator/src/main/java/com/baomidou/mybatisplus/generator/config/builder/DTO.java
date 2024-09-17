@@ -278,6 +278,9 @@ public class DTO implements ITemplate {
                             break;
                     }
                 }
+            } else {
+                crudFieldMap.get(ConstVal.C).add(field);
+                crudFieldMap.get(ConstVal.R).add(field);
             }
         }
         return crudFieldMap;

@@ -16,14 +16,14 @@ public class Main {
      * 数据源配置
      */
     private static final DataSourceConfig DATA_SOURCE_CONFIG = new DataSourceConfig
-        .Builder("jdbc:mysql://mywsl:3306/test?serverTimezone=Asia/Shanghai", "yang", "123456")
-        .schema("test")
+        .Builder("jdbc:mysql://mywsl:3306/crawler?serverTimezone=Asia/Shanghai", "yang", "123456")
+        .schema("crawler")
         .build();
 
     public static void main(String[] args) {
         String userHome = System.getProperty("user.home");
-        String workdir = Paths.get(userHome, "Documents\\code\\springdemo\\src\\main\\java").toString();
-        String packageName = "com.biz";
+        String workdir = Paths.get(userHome, "Documents\\code\\crawler_center\\src\\main\\java").toString();
+        String packageName = "app.biz";
         AutoGenerator generator = new AutoGenerator(DATA_SOURCE_CONFIG);
         generator.strategy(GeneratorBuilder.strategyConfigBuilder()
             .outputFile(
@@ -37,19 +37,19 @@ public class Main {
             )
             .controllerBuilder()
             .enableRestStyle()
-            .enableFileOverride()
+            //.enableFileOverride()
             .entityBuilder()
             .enableLombok()
-            .superClass("com.test.common.BaseEntity")
+            .superClass("app.common.BaseEntity")
             .addSuperEntityColumns("create_time", "update_time")
-            .enableFileOverride()
+            //.enableFileOverride()
             .dtoBuilder()
             .enableIdEncrypt()
             .enableLombok()
-            .superClass("com.test.common.BaseDTO")
-            .enableFileOverride()
+            .superClass("app.common.BaseDTO")
+            //.enableFileOverride()
             .converterBuilder()
-            .enableFileOverride()
+            //.enableFileOverride()
             .build());
         generator.global(GeneratorBuilder.globalConfigBuilder().author("yang").outputDir(workdir).build());
         generator.packageInfo(GeneratorBuilder.packageConfigBuilder()
@@ -57,9 +57,9 @@ public class Main {
             .xml("mapper")
             .build());
         HashMap<String, Object> customMap = new HashMap<>();
-        customMap.put("idInfoPackage", "com.test.common.IdInfo");
-        customMap.put("pageInfoPackage", "com.test.common.PageInfo");
-        customMap.put("responsePackage", "com.test.common.Response");
+        customMap.put("idInfoPackage", "app.common.IdInfo");
+        customMap.put("pageInfoPackage", "app.common.PageInfo");
+        customMap.put("responsePackage", "app.common.Response");
         generator.injection(GeneratorBuilder.injectionConfigBuilder()
             .customMap(customMap)
             .build());

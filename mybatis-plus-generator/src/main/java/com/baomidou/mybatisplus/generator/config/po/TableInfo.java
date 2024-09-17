@@ -359,11 +359,11 @@ public class TableInfo {
     }
 
     /**
-     * 推到主键
+     * 推导主键
      */
     public void detectPrimaryColumn() {
         fields.forEach(field -> {
-            if (field.isKeyIdentityFlag()) {
+            if (field.isKeyFlag()) {
                 primaryColumn = field.getCapitalName();
             }
         });

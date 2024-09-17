@@ -7,7 +7,7 @@ allprojects {
 
 ext {
     configuration = [
-        javaVersion = JavaVersion.VERSION_21
+        javaVersion = JavaVersion.VERSION_1_8
     ]
 
     libraries = [
@@ -90,9 +90,9 @@ subprojects {
         version = "1.18.32"
     }
 
-    compileJava {
-        options.release = 8
-    }
+//    compileJava {
+//        options.release = 8
+//    }
 
     repositories {
         mavenLocal()
